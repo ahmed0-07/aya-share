@@ -3,7 +3,7 @@ import { type Request } from "express";
 
 const storage = multer.diskStorage({
     destination: (req: Request, file, cb) => {
-        cb(null, "../uploads");
+        cb(null, "./src/uploads");
     },
     filename: (req: Request, file, cb) => {
         cb(null, Date.now() + "-" + file.originalname);

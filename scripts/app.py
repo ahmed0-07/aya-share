@@ -7,6 +7,7 @@ Converts audio recitations into videos with text overlays
 import json
 import os
 import logging
+from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 
 # Third-party imports
@@ -28,6 +29,19 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 logger = logging.getLogger(__name__)
+
+# Cross-platform paths for generated assets and static resources
+SCRIPT_ROOT = Path(__file__).resolve().parent
+UPLOAD_DIR = SCRIPT_ROOT.parent / "backend" / "upload"
+ASSETS_DIR = SCRIPT_ROOT / "assets"
+
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+
+DEFAULT_OUTPUT_VIDEO = UPLOAD_DIR / "final_video.mp4"
+DEFAULT_BG_IMAGE = ASSETS_DIR / "bg.png"
+DEFAULT_FONT_FILE = ASSETS_DIR / "TheYearofTheCamel-Regular.otf"
+DEFAULT_AUDIO_FILE = ASSETS_DIR / "quran.mp3"
 
 
 def transcribe_chunks(
@@ -395,11 +409,11 @@ def generate_video(
 
 def process_full_pipeline(
     audio_path: str,
-    output_video: str = "final_video.mp4",
-    output_dir: str = "splitted_audio",
+    output_video: str = str(DEFAULT_OUTPUT_VIDEO),
+    output_dir: str = str(UPLOAD_DIR),
     api_url: Optional[str] = None,
-    bg_path: str = "assets/bg.png",
-    font_path: str = "assets/TheYearofTheCamel-Regular.otf"
+    bg_path: str = str(DEFAULT_BG_IMAGE),
+    font_path: str = str(DEFAULT_FONT_FILE)
 ) -> Dict[str, any]:
     """
     Run the complete pipeline: split → transcribe → generate video.
@@ -477,12 +491,12 @@ if __name__ == "__main__":
     try:
         # Run the full pipeline: split → transcribe → generate video
         result = process_full_pipeline(
-            audio_path=r"", # path
-            output_video="final_video.mp4",
-            output_dir="splitted_audio",
-            api_url="https://c0c657ac6b48.ngrok-free.app/transcribe",  # Set to your API URL if you want transcription
-            bg_path=r"", # path
-            font_path=r"" # path
+            audio_path=str(DEFAULT_AUDIO_FILE),
+            output_video=str(DEFAULT_OUTPUT_VIDEO),
+            output_dir=str(UPLOAD_DIR),
+            api_url="https://fe5d98c12d9c.ngrok-free.app/transcribe",  # Set to your API URL if you want transcription
+            bg_path=str(DEFAULT_BG_IMAGE),
+            font_path=str(DEFAULT_FONT_FILE)
         )
         
         logger.info("\n" + "=" * 60)

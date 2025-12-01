@@ -490,12 +490,15 @@ if __name__ == "__main__":
     Accepts audio file path as command line argument from backend.
     """
     # Get audio path from command line argument
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         logger.error("Usage: python app.py <audio_path>")
         print(json.dumps({"status": "failed", "error": "No audio path provided"}))
         exit(1)
     
     audio_path_arg = sys.argv[1]
+    video_name = sys.argv[2]
+
+    DEFAULT_OUTPUT_VIDEO = UPLOAD_DIR / video_name
     
     # Convert to absolute path, resolving relative to backend directory
     audio_path = Path(audio_path_arg)
@@ -514,7 +517,7 @@ if __name__ == "__main__":
             audio_path=audio_path,
             output_video=str(DEFAULT_OUTPUT_VIDEO),
             output_dir=str(UPLOAD_DIR),
-            api_url="https://58c7bfd66721.ngrok-free.app/transcribe",
+            api_url="https://f3322ed61943.ngrok-free.app/transcribe",
             bg_path=str(DEFAULT_BG_IMAGE),
             font_path=str(DEFAULT_FONT_FILE)
         )

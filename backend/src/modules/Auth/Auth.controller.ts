@@ -7,7 +7,7 @@ export const handleCallBack = (req: Request, res: Response) => {
 
     const secret = config.JWT_SECRET_KEY as string;
     const token = jwt.sign({ id }, secret, {
-        expiresIn: "15m"
+        expiresIn: "1d"
     });
 
     // not used yet..
@@ -16,7 +16,7 @@ export const handleCallBack = (req: Request, res: Response) => {
         expiresIn: "3d"
     });
 
-    res.cookie("token", refreshToken, {
+    res.cookie("refreshtoken", refreshToken, {
         maxAge: 3 * 24 * 60 * 60 * 1000,
         httpOnly: true
     })
